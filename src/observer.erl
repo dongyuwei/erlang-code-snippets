@@ -16,11 +16,17 @@ observer(Fun) ->
     io:format("observer started: ~p ~n", [self()]),
     % the trap exit is needed, because if you don't have it the watching process will die if the linked process dies.
     process_flag(trap_exit, true),
+    start_worker(Fun).
+
+start_worker(Fun) ->
     Pid = spawn_link(Fun),
     register(worker_test, Pid), % `worker_test` for test in erl shell
+
     receive
         {'EXIT', Pid, Why} ->
-            io:format("worker died with:~p~n",[Why])
+            io:format("~p worker died with:~p~n",[Pid, Why]),
+            io:format("restart worker... ~n", []),
+            start_worker(Fun)
     end.
 
 worker() ->
