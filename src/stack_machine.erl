@@ -1,3 +1,4 @@
+% http://stenmans.org/happi_blog/?p=194
 -module(stack_machine).
 -export([compile/1, interpret/1, calc/1]).
 
